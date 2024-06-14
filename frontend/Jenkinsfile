@@ -1,0 +1,19 @@
+pipeline {
+    agent any    
+    stages {      
+        stage('Deploynibg to Vercel') {
+            steps {
+                script {
+                    sh 'curl https://api.vercel.com/v1/integrations/deploy/prj_4ZE5nxhbr2GMhV3q8hXHziTCMnhT/wj6hY4s1C1'
+                }
+            }
+        }
+        stage('Deployment Status') {
+            steps {
+                script {
+                    echo "Deployment to Vercel Completed"
+                }
+            }
+        }
+    }
+}
