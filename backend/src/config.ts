@@ -2,7 +2,7 @@
 import { config } from 'dotenv';
 import { resolve } from 'path';
 
-process.env.NODE_ENV = 'prod';
+process.env.NODE_ENV = 'local';
 
 const ENV_FILE_PATH = resolve(__dirname, '..', `.env.${process.env.NODE_ENV || 'local'}`);
 
