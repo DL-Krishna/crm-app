@@ -1,0 +1,63 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Old Container') {
+            steps {
+                script {
+                    def containerRunning = sh(script: 'docker inspect -f {{.State.Running}} prod-crm-be', returnStatus: true)
+                    if (containerRunning == 0) {
+                        sh 'docker container stop prod-crm-be' // Stop the existing container
+                        sh 'docker container rm -f prod-crm-be' // Remove the existing container
+                    } else {
+                        echo 'The specified container does not exist'
+                    }
+                }
+            }
+        }
+        
+        stage('Remove Previous Image') {
+            steps {
+                script {
+                    def imageExists = sh(script: 'docker images -q digitallyncdevops/prod-crm-be', returnStatus: true)
+                    if (imageExists == 0) {
+                        sh 'docker rmi digitallyncdevops/prod-crm-be'
+                    } else {
+                        echo 'The specified image is not found, skipping the image removal stage.'
+                    }
+                }
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh 'docker build -t digitallyncdevops/prod-crm-be .'
+                }
+            }
+        }
+        
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    sh 'docker container run -dt --name prod-crm-be --network prodcrm-network --restart always  -p 3001:3000 digitallyncdevops/prod-crm-be'
+                }
+            }
+        }
+        stage('Check Container Status') {
+            steps {
+                script {
+                    // Use 'docker ps' command to list running containers
+                    def containerStatus = sh(script: 'docker ps -q -f name=prod-crm-be', returnStdout: true).trim()
+                 
+                    if (containerStatus) {
+                        echo "Container is running with ID: ${containerStatus}"
+                    } else {
+                        error "Container is not running!"
+                    }
+                }
+            }
+        }
+
+    }
+}
