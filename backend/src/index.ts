@@ -4,7 +4,7 @@ import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 
 import './config';
-import { checkDatabaseAvailability } from './database';
+import { checkDatabaseAvailability, sequelize } from './database';
 
 import { apiDocumentation } from './docs/api-doc';
 
@@ -52,6 +52,10 @@ app.get('/', function(req, res) {
   res.status(200);
   res.send({message: 'dl crm services is up on running.'});
 });
+
+sequelize.sync({force:true}).then(()=>{
+  console.log('Database tables crated!');
+})
 
 async function startServer() {
   try {
