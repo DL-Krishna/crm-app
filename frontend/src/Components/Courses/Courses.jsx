@@ -1,6 +1,8 @@
+import React from 'react'
 import { useState } from "react";
 import TableHeader from "../TableHeader";
 import CreateCourse from "../Courses/CreateCourse";
+
 const Courses = () => {
   const [leads, setLeads] = useState([
     {
@@ -101,6 +103,7 @@ const Courses = () => {
                 </span>
               </td>
               <td className="py-3 px-4 border-b text-black">{lead.courseFee}</td>
+
             </tr>
           ))}
         </tbody>
@@ -113,4 +116,5 @@ const Courses = () => {
     </div>
 )
 }
+
 export default Courses

@@ -1,7 +1,9 @@
+import React from 'react'
 import { useState } from "react";
 import TableHeader from "../TableHeader";
-import LeadForm from "../Leads/CreateLead"; // Import the LeadForm component
+import LearnerForm from "../Learners/CreateLearner"; // Import the LeadForm component
 const Learner = () => {
+  
     const [leads, setLeads] = useState([
       {
         id: 1,
@@ -118,7 +120,7 @@ const Learner = () => {
             ))}
           </tbody>
         </table>
-        <LeadForm
+        <LearnerForm
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onSave={handleSaveLead}
@@ -126,4 +128,5 @@ const Learner = () => {
       </div>
   )
 }
+
 export default Learner

@@ -53,9 +53,11 @@ app.get('/', function(req, res) {
   res.send({message: 'dl crm services is up on running.'});
 });
 
-sequelize.sync({force:true}).then(()=>{
-  console.log('Database tables crated!');
-})
+// new 
+// sequelize.sync({force:true}).then(()=>{
+//   console.log('Database tables created!');
+  
+// })
 
 async function startServer() {
   try {
