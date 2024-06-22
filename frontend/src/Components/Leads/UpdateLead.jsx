@@ -1,39 +1,27 @@
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-const CreateLead = ({ isOpen, onClose, onSave }) => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    courseName: '',
-    description: ''
-  });
-
+const UpdateLead = ({ isOpen, onClose, lead, onSave }) => {
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', courseName: '', description: '' });
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if (isOpen) {
-      // Reset the form data and errors when the form is opened
+    if (isOpen && lead) {
       setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        courseName: '',
-        description: ''
+        name: lead.name,
+        email: lead.email,
+        phone: lead.phone,
+        courseName: lead.techStack,
+        description: lead.description || ''
       });
       setErrors({});
     }
-  }, [isOpen]);
+  }, [isOpen, lead]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSave = async () => {
@@ -41,13 +29,11 @@ const CreateLead = ({ isOpen, onClose, onSave }) => {
     if (!formData.name) {
       newErrors.name = "Name is mandatory";
     }
-
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
 
-    // Map courseName to techStack
     const payload = {
       name: formData.name,
       techStack: formData.courseName,
@@ -57,18 +43,17 @@ const CreateLead = ({ isOpen, onClose, onSave }) => {
     };
 
     try {
-      const token = localStorage.getItem('token'); // Retrieve the token from local storage
-      const response = await axios.post('http://localhost:3000/api/v1/leads', payload, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+      const token = localStorage.getItem('token');
+      const userId = JSON.parse(localStorage.getItem('userInfo')).userId;
+      await axios.put(`http://localhost:3000/api/v1/leads/${lead.id}`, { ...payload, userId }, {
+        headers: { Authorization: `Bearer ${token}` }
       });
-      toast.success("Lead created successfully");
-      onSave(response.data.data); // Pass the newly created lead data to the parent
-      onClose(); // Close the modal after saving
+      toast.success("Lead updated successfully");
+      onSave({ ...lead, ...payload });
+      onClose();
     } catch (error) {
-      console.error('Error saving lead:', error);
-      toast.error("Failed to create lead");
+      console.error('Error updating lead:', error);
+      toast.error("Failed to update lead");
     }
   };
 
@@ -77,7 +62,7 @@ const CreateLead = ({ isOpen, onClose, onSave }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-1/2">
-        <h2 className="text-xl mb-4">Create Lead</h2>
+        <h2 className="text-xl mb-4">Update Lead</h2>
         <div className="grid grid-cols-2 gap-4">
           <div className="flex flex-col">
             <input
@@ -131,11 +116,11 @@ const CreateLead = ({ isOpen, onClose, onSave }) => {
         />
         <div className="flex justify-end mt-4 space-x-2">
           <button onClick={onClose} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
-          <button onClick={handleSave} className="bg-blue-500 text-white px-4 py-2 rounded">Create</button>
+          <button onClick={handleSave} className="bg-blue-500 text-white px-4 py-2 rounded">Update</button>
         </div>
       </div>
     </div>
   );
 };
 
-export default CreateLead;
+export default UpdateLead;

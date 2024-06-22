@@ -136,21 +136,86 @@ export const createLead = async (req: Request, res: Response): Promise<Response>
     }
 };
 
+// export const updateLead = async (req: Request, res: Response): Promise<Response> => {
+//     try {
+
+//         // Validate request body against Joi schema
+//         // const { error } = leadSchema.validate(req.body);
+//         // if (error) {
+//         //     return res.status(400).json({ message: error.details[0].message });
+//         // }
+
+//         // Extract lead ID from request parameters
+//         const id = parseInt(req.params.id);
+
+//         // Extract updated lead details from request body
+//         const { name, leadSource, countryCode, techStack, phone, courseId, email, classMode, feeQuoted, batchTiming, userId, description, nextFollowUp, leadStatus, leadStage } = req.body;
+
+
+//         // Find the lead by ID
+//         const lead = await Lead.findByPk(id);
+
+//         // If lead is not found, return 404 Not Found
+//         if (!lead) {
+//             return res.status(404).json({ message: 'Lead not found' });
+//         }
+
+//         // Update lead attributes
+//         lead.name = name;
+//         lead.leadSource = leadSource;
+//         lead.countryCode = countryCode;
+//         lead.techStack = techStack;
+//         lead.phone = phone;
+//         lead.courseId = courseId;
+//         lead.email = email;
+//         lead.classMode = classMode;
+//         lead.feeQuoted = feeQuoted;
+//         lead.batchTiming = batchTiming;
+//         lead.userId = userId;
+//         lead.description = description;
+//         lead.nextFollowUp = nextFollowUp;
+//         lead.leadStatus = leadStatus;
+//         lead.leadStage = leadStage;
+
+//         // Save the changes to the database
+//         await lead.save();
+
+//         // Return a JSON response with the updated lead details
+//         return res.json({
+//             message: 'Lead updated successfully',
+//             lead: {
+//                 id,
+//                 name,
+//                 leadSource,
+//                 countryCode,
+//                 techStack,
+//                 phone,
+//                 courseId,
+//                 email,
+//                 classMode,
+//                 feeQuoted,
+//                 batchTiming,
+//                 userId,
+//                 description,
+//                 nextFollowUp,
+//                 leadStatus,
+//                 leadStage
+//             },
+//         });
+//     } catch (error) {
+//         // Handle errors, log them, and return an internal server error response
+//         console.error('Error updating lead:', error);
+//         return res.status(500).json('Internal Server error');
+//     }
+// };
+
 export const updateLead = async (req: Request, res: Response): Promise<Response> => {
     try {
-
-        // Validate request body against Joi schema
-        // const { error } = leadSchema.validate(req.body);
-        // if (error) {
-        //     return res.status(400).json({ message: error.details[0].message });
-        // }
-
         // Extract lead ID from request parameters
         const id = parseInt(req.params.id);
 
         // Extract updated lead details from request body
         const { name, leadSource, countryCode, techStack, phone, courseId, email, classMode, feeQuoted, batchTiming, userId, description, nextFollowUp, leadStatus, leadStage } = req.body;
-
 
         // Find the lead by ID
         const lead = await Lead.findByPk(id);
@@ -159,6 +224,10 @@ export const updateLead = async (req: Request, res: Response): Promise<Response>
         if (!lead) {
             return res.status(404).json({ message: 'Lead not found' });
         }
+
+        // Log current and updated lead data
+        console.log('Current Lead:', lead);
+        console.log('Updated Data:', req.body);
 
         // Update lead attributes
         lead.name = name;
@@ -183,32 +252,17 @@ export const updateLead = async (req: Request, res: Response): Promise<Response>
         // Return a JSON response with the updated lead details
         return res.json({
             message: 'Lead updated successfully',
-            lead: {
-                id,
-                name,
-                leadSource,
-                countryCode,
-                techStack,
-                phone,
-                courseId,
-                email,
-                classMode,
-                feeQuoted,
-                batchTiming,
-                userId,
-                description,
-                nextFollowUp,
-                leadStatus,
-                leadStage
-            },
+            lead,
         });
     } catch (error) {
         // Handle errors, log them, and return an internal server error response
         console.error('Error updating lead:', error);
+        if (error instanceof Error) {
+            return res.status(500).json({ message: error.message });
+        }
         return res.status(500).json('Internal Server error');
     }
 };
-
 // Delete a lead by ID
 export const deleteLead = async (req: Request, res: Response): Promise<Response> => {
     // Extract lead ID from request parameters

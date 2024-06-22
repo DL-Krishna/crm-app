@@ -1,8 +1,79 @@
-import logo from "../assets/digital_lync.png";
+// import React from "react";
+// import logo from "../../assets/digital_lync.png";
+// import { GoBell } from "react-icons/go";
+// import { CgProfile } from "react-icons/cg";
+// import { NavLink } from 'react-router-dom';
+// import LogoutButton from "../Logout/Logout";
+
+// // const Navbar = () => {
+// //   return (
+// //     <div>
+// //       <nav className="bg-white-900 shadow-lg w-screen">
+// //         <div className="  flex items-center justify-between">
+// //           <div className="items-center ms-6">
+// //             <a href="/home" className="">
+// //               <img src={logo} />
+// //             </a>
+// //           </div>
+// //           <div className="flex items-center ">
+// //             <ul className="hidden md:flex py-6 space-x-2 text-xl me-6">
+// //               <li>
+// //                 <a href="/home" className="py-4 px-4 hover:bg-red-100 hover:border-b-2 hover:border-b-red-500">
+// //                   Home
+// //                 </a>
+// //               </li>
+// //               <li>
+// //                 <a href="/leads" className="py-4 px-4 hover:bg-red-100 hover:border-b-2 hover:border-b-red-500">
+// //                   Leads
+// //                 </a>
+// //               </li>
+// //               <li>
+// //                 <a href="#" className="py-4 px-4 hover:bg-red-100 hover:border-b-2 hover:border-b-red-500">
+// //                   Opportunities
+// //                 </a>
+// //               </li>
+// //               <li>
+// //                 <a href="#" className="py-4 px-4 hover:bg-red-100 hover:border-b-2 hover:border-b-red-500">
+// //                   Learners
+// //                 </a>
+// //               </li>
+// //               <li>
+// //                 <a href="#" className="py-4 px-4 hover:bg-red-100 hover:border-b-2 hover:border-b-red-500">
+// //                   Courses
+// //                 </a>
+// //               </li>
+// //               <li>
+// //                 <a href="#" className="py-4 px-4 hover:bg-red-100 hover:border-b-2 hover:border-b-red-500">
+// //                   Activities
+// //                 </a>
+// //               </li>
+// //               <li>
+// //                 <a href="#" className="py-4 px-4 hover:bg-red-100 hover:border-b-2 hover:border-b-red-500">
+// //                   Analytics
+// //                 </a>
+// //               </li>
+// //             </ul>
+// //             <ul className="flex mx-6 space-x-4">
+// //                <GoBell className=" cursor-pointer size-7" />
+// //                <CgProfile className=" cursor-pointer size-7" />
+// //             </ul>
+// //           </div>
+// //         </div>
+// //       </nav>
+// //     </div>
+// //   );
+// // };
+
+// // export default Navbar;
+
+
+import React from "react";
+import logo from "../../assets/digital_lync.png";
 import { GoBell } from "react-icons/go";
 import { CgProfile } from "react-icons/cg";
 import { NavLink } from 'react-router-dom';
 import LogoutButton from "../Logout/Logout";
+
 const NavBar = () => {
   return (
     <div className="fixed top-0 left-0 w-full bg-white shadow-lg z-10">
@@ -14,7 +85,7 @@ const NavBar = () => {
             </a>
           </div>
           <div className='flex'>
-            <ul className='hidden md:flex space-x-2 text-lg'>
+            <ul className='hidden md:flex space-x-4 text-lg'>
               <li>
                 <NavLink
                   to="/home"
@@ -74,8 +145,8 @@ const NavBar = () => {
                 >
                   Activities
                 </NavLink>
-              </li>
-              <li>
+              </li> */}
+              {/* <li>
                 <NavLink
                   to="/analytics"
                   className={({ isActive }) =>
@@ -86,7 +157,7 @@ const NavBar = () => {
                 </NavLink>
               </li> */}
             </ul>
-            <ul className='flex items-center space-x-6'>
+            <ul className='flex items-center space-x-2'>
               <GoBell className='cursor-pointer text-2xl' />
               <CgProfile className='cursor-pointer text-2xl' />
               <LogoutButton />
@@ -97,4 +168,5 @@ const NavBar = () => {
     </div>
   );
 };
+
 export default NavBar;
