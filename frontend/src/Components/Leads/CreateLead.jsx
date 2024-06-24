@@ -42,6 +42,9 @@ const CreateLead = ({ isOpen, onClose, onSave }) => {
     if (!formData.name) {
       newErrors.name = "Name is mandatory";
     }
+    if (!formData.phone) {
+      newErrors.phone = "Phone is mandatory";
+    }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -111,6 +114,7 @@ const CreateLead = ({ isOpen, onClose, onSave }) => {
               onChange={handleChange}
               className="border p-2 rounded"
             />
+            {errors.phone && <span className="text-red-500 text-sm mt-1">{errors.phone}</span>}
           </div>
           <div className="flex flex-col">
             <input
