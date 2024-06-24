@@ -162,6 +162,7 @@ import LeadForm from "./CreateLead"; // Import the LeadForm component
 import UpdateLead from "./UpdateLead"; // Import the UpdateLead component
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { baseUrl } from "../../api/BaseUrl";
 
 const Lead = () => {
   const [leads, setLeads] = useState([]);
@@ -175,7 +176,7 @@ const Lead = () => {
     const fetchLeads = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:3000/api/v1/leads', {
+        const response = await axios.get(`${baseUrl}/leads`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setLeads(response.data.leads);
@@ -224,7 +225,7 @@ const Lead = () => {
   const handleDeleteSelected = async () => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:3000/api/v1/leads?ids=${selectedRows.join(',')}`, {
+      await axios.delete(`${baseUrl}/leads?ids=${selectedRows.join(',')}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setLeads(leads.filter((lead) => !selectedRows.includes(lead.id)));

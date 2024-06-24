@@ -83,7 +83,7 @@ const TableHeader = ({ onCreateLead, onSearch, onDelete }) => {
       <div className="flex justify-between">
         <div className="flex">
           <h1 className="text-2xl font-medium ">{headerText}</h1>
-          <Menu as="div" className="relative inline-block text-left">
+          {/* <Menu as="div" className="relative inline-block text-left">
             <div>
               <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold ">
                 <MdKeyboardArrowDown
@@ -92,7 +92,7 @@ const TableHeader = ({ onCreateLead, onSearch, onDelete }) => {
                 />
               </MenuButton>
             </div>
-          </Menu>
+          </Menu> */}
         </div>
         <div className="flex h-8 space-x-2">
           <button

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { baseUrl } from '../../api/BaseUrl';
 
 const CreateLead = ({ isOpen, onClose, onSave }) => {
   const [formData, setFormData] = useState({
@@ -58,7 +59,7 @@ const CreateLead = ({ isOpen, onClose, onSave }) => {
 
     try {
       const token = localStorage.getItem('token'); // Retrieve the token from local storage
-      const response = await axios.post('http://localhost:3000/api/v1/leads', payload, {
+      const response = await axios.post(`${baseUrl}/leads`, payload, {
         headers: {
           Authorization: `Bearer ${token}`
         }

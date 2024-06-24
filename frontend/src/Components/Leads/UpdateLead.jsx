@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { baseUrl } from '../../api/BaseUrl';
 
 const UpdateLead = ({ isOpen, onClose, lead, onSave }) => {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', courseName: '', description: '' });
@@ -45,7 +46,7 @@ const UpdateLead = ({ isOpen, onClose, lead, onSave }) => {
     try {
       const token = localStorage.getItem('token');
       const userId = JSON.parse(localStorage.getItem('userInfo')).userId;
-      await axios.put(`http://localhost:3000/api/v1/leads/${lead.id}`, { ...payload, userId }, {
+      await axios.put(`${baseUrl}/leads/${lead.id}`, { ...payload, userId }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.success("Lead updated successfully");
