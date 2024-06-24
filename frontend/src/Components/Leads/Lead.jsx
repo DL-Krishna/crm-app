@@ -22,7 +22,8 @@ const Lead = () => {
         const response = await axios.get(`${baseUrl}/leads`, {
           headers: { Authorization: `Bearer ${token}` }
         });
-        setLeads(response.data.leads);
+        const Leads = response.data.leads.filter(lead => lead.leadStage === "lead");
+        setLeads(Leads);
       } catch (error) {
         console.error('Error fetching leads:', error);
         toast.error("Failed to fetch leads");
