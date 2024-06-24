@@ -63,7 +63,7 @@ Lead.init({
   },
   countryCode: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   techStack: {
     type: DataTypes.STRING,
