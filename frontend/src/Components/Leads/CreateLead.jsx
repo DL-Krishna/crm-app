@@ -13,7 +13,9 @@ const CreateLead = ({ isOpen, onClose, onSave }) => {
     description: ''
   });
 
+
   const [errors, setErrors] = useState({});
+
 
   useEffect(() => {
     if (isOpen) {
@@ -29,6 +31,7 @@ const CreateLead = ({ isOpen, onClose, onSave }) => {
     }
   }, [isOpen]);
 
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -38,10 +41,13 @@ const CreateLead = ({ isOpen, onClose, onSave }) => {
   };
 
   const handleSave = async () => {
+
+  const handleSave = async () => {
     const newErrors = {};
     if (!formData.name) {
       newErrors.name = "Name is mandatory";
     }
+
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -75,6 +81,7 @@ const CreateLead = ({ isOpen, onClose, onSave }) => {
 
   if (!isOpen) return null;
 
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-1/2">
@@ -90,6 +97,7 @@ const CreateLead = ({ isOpen, onClose, onSave }) => {
               className="border p-2 rounded"
               required
             />
+            {errors.name && <span className="text-red-500 text-sm mt-1">{errors.name}</span>}
             {errors.name && <span className="text-red-500 text-sm mt-1">{errors.name}</span>}
           </div>
           <div className="flex flex-col">
@@ -133,10 +141,12 @@ const CreateLead = ({ isOpen, onClose, onSave }) => {
         <div className="flex justify-end mt-4 space-x-2">
           <button onClick={onClose} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
           <button onClick={handleSave} className="bg-blue-500 text-white px-4 py-2 rounded">Create</button>
+          <button onClick={handleSave} className="bg-blue-500 text-white px-4 py-2 rounded">Create</button>
         </div>
       </div>
     </div>
   );
 };
+
 
 export default CreateLead;
