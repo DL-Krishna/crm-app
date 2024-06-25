@@ -9,4 +9,7 @@ export default defineConfig({
       'react-router-dom', // Ensure react-router-dom is included in optimizeDeps
     ],
   },
+  server: {
+    historyApiFallback: true
+  }
 })
