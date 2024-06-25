@@ -1,4 +1,7 @@
 // import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+// import { toast } from 'react-toastify';
+// import { baseUrl } from '../../api/BaseUrl';
 
 // const CreateLearner = ({ isOpen, onClose, onSave }) => {
 //   const [formData, setFormData] = useState({
@@ -10,6 +13,7 @@
 //   });
 
 //   const [errors, setErrors] = useState({});
+//   const [isLoading, setIsLoading] = useState(false); // State to track loading status
 
 //   useEffect(() => {
 //     if (isOpen) {
@@ -33,7 +37,7 @@
 //     });
 //   };
 
-//   const handleSave = () => {
+//   const handleSave = async () => {
 //     const newErrors = {};
 //     if (!formData.name) {
 //       newErrors.name = "Name is mandatory";
@@ -44,8 +48,32 @@
 //       return;
 //     }
 
-//     onSave(formData);
-//     onClose();
+//     // Map courseName to techStack
+//     const payload = {
+//       name: formData.name,
+//       techStack: formData.courseName,
+//       phone: formData.phone,
+//       email: formData.email,
+//       description: formData.description,
+//       leadStage:'learner'
+//     };
+//     setIsLoading(true); // Start loading
+
+//     try {
+//       const token = localStorage.getItem('token'); // Retrieve the token from local storage
+//       const response = await axios.post(`${baseUrl}/leads`, payload, {
+//         headers: {
+//           Authorization: `Bearer ${token}`
+//         }
+//       });
+//       toast.success("Learner created successfully");
+//       onSave(response.data.data); // Pass the newly created lead data to the parent
+//       onClose(); // Close the modal after saving
+//     } catch (error) {
+//       console.error('Error saving learner:', error);
+//       toast.error("Failed to create learner");
+//     }
+//     setIsLoading(false);
 //   };
 
 //   if (!isOpen) return null;
@@ -65,7 +93,7 @@
 //               className="border p-2 rounded"
 //               required
 //             />
-//             {errors.name && <span className=" ps-2 text-red-500 text-sm mt-1">{errors.name}</span>}
+//             {errors.name && <span className="text-red-500 text-sm mt-1">{errors.name}</span>}
 //           </div>
 //           <div className="flex flex-col">
 //             <input
@@ -107,7 +135,11 @@
 //         />
 //         <div className="flex justify-end mt-4 space-x-2">
 //           <button onClick={onClose} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
-//           <button onClick={handleSave} className="bg-blue-500 text-white px-4 py-2 rounded">Create</button>
+//           <button onClick={handleSave} className="bg-blue-500 flex text-white px-4 py-2 rounded">Create
+//           {isLoading && (
+//               <svg className="animate-spin h-5 w-5 mr-3 border-t-2 border-b-2 border-white rounded-full" viewBox="0 0 24 24"></svg>
+//             )}
+//           </button>
 //         </div>
 //       </div>
 //     </div>
@@ -115,9 +147,6 @@
 // };
 
 // export default CreateLearner;
-
-
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -133,6 +162,7 @@ const CreateLearner = ({ isOpen, onClose, onSave }) => {
   });
 
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false); // State to track loading status
 
   useEffect(() => {
     if (isOpen) {
@@ -177,8 +207,9 @@ const CreateLearner = ({ isOpen, onClose, onSave }) => {
       phone: formData.phone,
       email: formData.email,
       description: formData.description,
-      leadStage:'learner'
+      leadStage: 'learner'
     };
+    setIsLoading(true); // Start loading
 
     try {
       const token = localStorage.getItem('token'); // Retrieve the token from local storage
@@ -194,6 +225,7 @@ const CreateLearner = ({ isOpen, onClose, onSave }) => {
       console.error('Error saving learner:', error);
       toast.error("Failed to create learner");
     }
+    setIsLoading(false); // End loading
   };
 
   if (!isOpen) return null;
@@ -256,7 +288,16 @@ const CreateLearner = ({ isOpen, onClose, onSave }) => {
         />
         <div className="flex justify-end mt-4 space-x-2">
           <button onClick={onClose} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
-          <button onClick={handleSave} className="bg-blue-500 text-white px-4 py-2 rounded">Create</button>
+          <button 
+            onClick={handleSave} 
+            className="bg-blue-500 text-white px-4 py-2 rounded flex items-center"
+          >
+            {isLoading && (
+              <svg className="animate-spin h-5 w-5 mr-3 border-t-2 border-b-2 border-white rounded-full" viewBox="0 0 24 24"></svg>
+            )}
+          
+            Create
+          </button>
         </div>
       </div>
     </div>

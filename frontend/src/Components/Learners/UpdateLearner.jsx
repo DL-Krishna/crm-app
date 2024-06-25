@@ -6,6 +6,8 @@ import { baseUrl } from '../../api/BaseUrl';
 const UpdateLead = ({ isOpen, onClose, lead, onSave }) => {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', courseName: '', description: '' });
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false); // State to track loading status
+
 
   useEffect(() => {
     if (isOpen && lead) {
@@ -30,6 +32,9 @@ const UpdateLead = ({ isOpen, onClose, lead, onSave }) => {
     if (!formData.name) {
       newErrors.name = "Name is mandatory";
     }
+    if (!formData.phone) {
+      newErrors.phone = "Phone is mandatory";
+    }
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
@@ -42,6 +47,7 @@ const UpdateLead = ({ isOpen, onClose, lead, onSave }) => {
       email: formData.email,
       description: formData.description
     };
+    setIsLoading(true);
 
     try {
       const token = localStorage.getItem('token');
@@ -56,6 +62,7 @@ const UpdateLead = ({ isOpen, onClose, lead, onSave }) => {
       console.error('Error updating lead:', error);
       toast.error("Failed to update lead");
     }
+    setIsLoading(false)
   };
 
   if (!isOpen) return null;
@@ -117,7 +124,11 @@ const UpdateLead = ({ isOpen, onClose, lead, onSave }) => {
         />
         <div className="flex justify-end mt-4 space-x-2">
           <button onClick={onClose} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
-          <button onClick={handleSave} className="bg-blue-500 text-white px-4 py-2 rounded">Update</button>
+          <button onClick={handleSave} className="bg-blue-500 text-white px-4 py-2 flex rounded">Update
+          {isLoading && (
+              <svg className="animate-spin h-5 w-5 mr-3 border-t-2 border-b-2 border-white rounded-full" viewBox="0 0 24 24"></svg>
+            )}
+          </button>
         </div>
       </div>
     </div>
