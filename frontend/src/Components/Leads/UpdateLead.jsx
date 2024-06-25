@@ -2,6 +2,7 @@ import  { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { baseUrl } from '../../api/BaseUrl';
+import { useNavigate } from 'react-router-dom';
 
 // eslint-disable-next-line react/prop-types
 const UpdateLead = ({ isOpen, onClose, lead, onSave }) => {
@@ -9,6 +10,7 @@ const UpdateLead = ({ isOpen, onClose, lead, onSave }) => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false); // State to track loading status
 
+  const navigate = useNavigate();  // Step 1: Create a navigate instance
 
   useEffect(() => {
     if (isOpen && lead) {
@@ -27,6 +29,32 @@ const UpdateLead = ({ isOpen, onClose, lead, onSave }) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+  const handleConvert = async () => {
+    const payload = {
+      name: formData.name,
+      techStack: formData.courseName,
+      phone: formData.phone,
+      email: formData.email,
+      description: formData.description,
+      leadStage: "learner",
+    };
+
+    try {
+      const token = localStorage.getItem('token');
+      const userId = JSON.parse(localStorage.getItem('userInfo')).userId;
+      await axios.put(`${baseUrl}/leads/${lead.id}`, { ...payload, userId }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      toast.success("Lead converted successfully");
+      onSave({ ...lead, ...payload });
+      onClose();
+      navigate('/learners');  // Step 2: Navigate to the 'learners' page
+    } catch (error) {
+      console.error('Error converting lead:', error);
+      toast.error("Failed to convert lead");
+    }
+  }
 
   const handleSave = async () => {
     const newErrors = {};
@@ -69,7 +97,10 @@ const UpdateLead = ({ isOpen, onClose, lead, onSave }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-1/2">
-        <h2 className="text-xl mb-4">Update Lead</h2>
+        <div className="flex justify-between items-center">
+          <h2 className="text-xl mb-4">Update Lead</h2>
+          <button onClick={handleConvert} className="bg-green-500 text-white px-2 py-1 mb-4 rounded">Convert</button>
+        </div>
         <div className="grid grid-cols-2 gap-4">
           <div className="flex flex-col">
             <input

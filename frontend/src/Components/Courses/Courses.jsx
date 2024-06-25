@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TableHeader from "../TableHeader";
 import CreateCourse from "../Courses/CreateCourse";
 

@@ -1,10 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import { baseUrl } from '../../api/BaseUrl';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { baseUrl } from "../../api/BaseUrl";
 
 const UpdateLead = ({ isOpen, onClose, lead, onSave }) => {
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '', courseName: '', description: '' });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    courseName: "",
+    description: "",
+  });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false); // State to track loading status
 
@@ -16,7 +22,7 @@ const UpdateLead = ({ isOpen, onClose, lead, onSave }) => {
         email: lead.email,
         phone: lead.phone,
         courseName: lead.techStack,
-        description: lead.description || ''
+        description: lead.description || "",
       });
       setErrors({});
     }
@@ -45,21 +51,25 @@ const UpdateLead = ({ isOpen, onClose, lead, onSave }) => {
       techStack: formData.courseName,
       phone: formData.phone,
       email: formData.email,
-      description: formData.description
+      description: formData.description,
     };
     setIsLoading(true);
 
     try {
-      const token = localStorage.getItem('token');
-      const userId = JSON.parse(localStorage.getItem('userInfo')).userId;
-      await axios.put(`${baseUrl}/leads/${lead.id}`, { ...payload, userId }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const token = localStorage.getItem("token");
+      const userId = JSON.parse(localStorage.getItem("userInfo")).userId;
+      await axios.put(
+        `${baseUrl}/leads/${lead.id}`,
+        { ...payload, userId },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       toast.success("Lead updated successfully");
       onSave({ ...lead, ...payload });
       onClose();
     } catch (error) {
-      console.error('Error updating lead:', error);
+      console.error("Error updating lead:", error);
       toast.error("Failed to update lead");
     }
     setIsLoading(false)
@@ -82,7 +92,9 @@ const UpdateLead = ({ isOpen, onClose, lead, onSave }) => {
               className="border p-2 rounded"
               required
             />
-            {errors.name && <span className="text-red-500 text-sm mt-1">{errors.name}</span>}
+            {errors.name && (
+              <span className="text-red-500 text-sm mt-1">{errors.name}</span>
+            )}
           </div>
           <div className="flex flex-col">
             <input
@@ -96,7 +108,7 @@ const UpdateLead = ({ isOpen, onClose, lead, onSave }) => {
           </div>
           <div className="flex flex-col">
             <input
-              type="text"
+              type="number"
               name="phone"
               placeholder="Phone"
               value={formData.phone}

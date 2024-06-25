@@ -154,11 +154,11 @@ import { baseUrl } from '../../api/BaseUrl';
 
 const CreateLearner = ({ isOpen, onClose, onSave }) => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    courseName: '',
-    description: ''
+    name: "",
+    email: "",
+    phone: "",
+    courseName: "",
+    description: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -168,11 +168,11 @@ const CreateLearner = ({ isOpen, onClose, onSave }) => {
     if (isOpen) {
       // Reset the form data and errors when the form is opened
       setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        courseName: '',
-        description: ''
+        name: "",
+        email: "",
+        phone: "",
+        courseName: "",
+        description: "",
       });
       setErrors({});
     }
@@ -182,7 +182,7 @@ const CreateLearner = ({ isOpen, onClose, onSave }) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -212,17 +212,17 @@ const CreateLearner = ({ isOpen, onClose, onSave }) => {
     setIsLoading(true); // Start loading
 
     try {
-      const token = localStorage.getItem('token'); // Retrieve the token from local storage
+      const token = localStorage.getItem("token"); // Retrieve the token from local storage
       const response = await axios.post(`${baseUrl}/leads`, payload, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
       toast.success("Learner created successfully");
       onSave(response.data.data); // Pass the newly created lead data to the parent
       onClose(); // Close the modal after saving
     } catch (error) {
-      console.error('Error saving learner:', error);
+      console.error("Error saving learner:", error);
       toast.error("Failed to create learner");
     }
     setIsLoading(false); // End loading
@@ -245,7 +245,9 @@ const CreateLearner = ({ isOpen, onClose, onSave }) => {
               className="border p-2 rounded"
               required
             />
-            {errors.name && <span className="text-red-500 text-sm mt-1">{errors.name}</span>}
+            {errors.name && (
+              <span className="text-red-500 text-sm mt-1">{errors.name}</span>
+            )}
           </div>
           <div className="flex flex-col">
             <input
@@ -259,14 +261,16 @@ const CreateLearner = ({ isOpen, onClose, onSave }) => {
           </div>
           <div className="flex flex-col">
             <input
-              type="text"
+              type="number"
               name="phone"
               placeholder="Phone"
               value={formData.phone}
               onChange={handleChange}
               className="border p-2 rounded"
             />
-            {errors.phone && <span className="text-red-500 text-sm mt-1">{errors.phone}</span>}
+            {errors.phone && (
+              <span className="text-red-500 text-sm mt-1">{errors.phone}</span>
+            )}
           </div>
           <div className="flex flex-col">
             <input

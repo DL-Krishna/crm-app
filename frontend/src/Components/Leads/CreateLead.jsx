@@ -6,11 +6,11 @@ import { baseUrl } from '../../api/BaseUrl';
 // eslint-disable-next-line react/prop-types
 const CreateLead = ({ isOpen, onClose, onSave }) => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    courseName: '',
-    description: ''
+    name: "",
+    email: "",
+    phone: "",
+    courseName: "",
+    description: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -20,11 +20,11 @@ const CreateLead = ({ isOpen, onClose, onSave }) => {
     if (isOpen) {
       // Reset the form data and errors when the form is opened
       setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        courseName: '',
-        description: ''
+        name: "",
+        email: "",
+        phone: "",
+        courseName: "",
+        description: "",
       });
       setErrors({});
     }
@@ -34,7 +34,7 @@ const CreateLead = ({ isOpen, onClose, onSave }) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -58,23 +58,23 @@ const CreateLead = ({ isOpen, onClose, onSave }) => {
       techStack: formData.courseName,
       phone: formData.phone,
       email: formData.email,
-      description: formData.description
+      description: formData.description,
     };
 
     setIsLoading(true); // Start loading
 
     try {
-      const token = localStorage.getItem('token'); // Retrieve the token from local storage
+      const token = localStorage.getItem("token"); // Retrieve the token from local storage
       const response = await axios.post(`${baseUrl}/leads`, payload, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
       toast.success("Lead created successfully");
       onSave(response.data.data); // Pass the newly created lead data to the parent
       onClose(); // Close the modal after saving
     } catch (error) {
-      console.error('Error saving lead:', error);
+      console.error("Error saving lead:", error);
       toast.error("Failed to create lead");
     }
 
@@ -98,7 +98,9 @@ const CreateLead = ({ isOpen, onClose, onSave }) => {
               className="border p-2 rounded"
               required
             />
-            {errors.name && <span className="text-red-500 text-sm mt-1">{errors.name}</span>}
+            {errors.name && (
+              <span className="text-red-500 text-sm mt-1">{errors.name}</span>
+            )}
           </div>
           <div className="flex flex-col">
             <input
@@ -112,7 +114,7 @@ const CreateLead = ({ isOpen, onClose, onSave }) => {
           </div>
           <div className="flex flex-col">
             <input
-              type="text"
+              type="number"
               name="phone"
               placeholder="Phone"
               value={formData.phone}
