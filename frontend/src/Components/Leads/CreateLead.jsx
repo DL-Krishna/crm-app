@@ -1,9 +1,9 @@
-
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { baseUrl } from '../../api/BaseUrl';
 
+// eslint-disable-next-line react/prop-types
 const CreateLead = ({ isOpen, onClose, onSave }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -14,6 +14,7 @@ const CreateLead = ({ isOpen, onClose, onSave }) => {
   });
 
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false); // State to track loading status
 
   useEffect(() => {
     if (isOpen) {
@@ -60,6 +61,8 @@ const CreateLead = ({ isOpen, onClose, onSave }) => {
       description: formData.description
     };
 
+    setIsLoading(true); // Start loading
+
     try {
       const token = localStorage.getItem('token'); // Retrieve the token from local storage
       const response = await axios.post(`${baseUrl}/leads`, payload, {
@@ -74,6 +77,8 @@ const CreateLead = ({ isOpen, onClose, onSave }) => {
       console.error('Error saving lead:', error);
       toast.error("Failed to create lead");
     }
+
+    setIsLoading(false); // End loading
   };
 
   if (!isOpen) return null;
@@ -114,7 +119,7 @@ const CreateLead = ({ isOpen, onClose, onSave }) => {
               onChange={handleChange}
               className="border p-2 rounded"
             />
-            {errors.phone && <span className="text-red-500 text-sm mt-1">{errors.phone}</span>}
+             {errors.phone && <span className="text-red-500 text-sm mt-1">{errors.phone}</span>}
           </div>
           <div className="flex flex-col">
             <input
@@ -136,7 +141,12 @@ const CreateLead = ({ isOpen, onClose, onSave }) => {
         />
         <div className="flex justify-end mt-4 space-x-2">
           <button onClick={onClose} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
-          <button onClick={handleSave} className="bg-blue-500 text-white px-4 py-2 rounded">Create</button>
+          <button onClick={handleSave} className="bg-blue-500 text-white px-4 py-2 rounded flex items-center">
+            {isLoading && (
+              <svg className="animate-spin h-5 w-5 mr-3 border-t-2 border-b-2 border-white rounded-full" viewBox="0 0 24 24"></svg>
+            )}
+            Create
+          </button>
         </div>
       </div>
     </div>

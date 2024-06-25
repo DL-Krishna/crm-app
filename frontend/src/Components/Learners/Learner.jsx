@@ -148,9 +148,13 @@ const Learner = () => {
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [currentLead, setCurrentLead] = useState(null); // State to store the lead being updated
   const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // State to track loading status
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false); // State to track delete loading status
+
 
   useEffect(() => {
     const fetchLeads = async () => {
+      setIsLoading(true)
       try {
         const token = localStorage.getItem('token');
         const response = await axios.get(`${baseUrl}/leads`, {
@@ -161,7 +165,10 @@ const Learner = () => {
       } catch (error) {
         console.error('Error fetching leads:', error);
         toast.error("Failed to fetch leads");
+
       }
+      setIsLoading(false); // End loading
+
     };
     fetchLeads();
   }, []);
@@ -201,6 +208,8 @@ const Learner = () => {
   };
 
   const handleDeleteSelected = async () => {
+    setIsDeleteLoading(true); // Start delete loading
+
     try {
       const token = localStorage.getItem('token');
       await axios.delete(`${baseUrl}/leads?ids=${selectedRows.join(',')}`, {
@@ -213,6 +222,8 @@ const Learner = () => {
       console.error('Error deleting leads:', error);
       toast.error("Failed to delete leads");
     }
+    setIsDeleteLoading(false); // End delete loading
+
   };
 
   const handleRowClick = (lead) => {
@@ -230,7 +241,12 @@ const Learner = () => {
   return (
     <div className="mx-6 mt-28 p-8 bg-white border-2 border-gray-200 rounded-lg shadow-lg">
       <ToastContainer />
-      <TableHeader onCreateLead={handleCreateLead} onSearch={handleSearch} onDelete={handleDeleteSelected} />
+      <TableHeader onCreateLead={handleCreateLead} onSearch={handleSearch} onDelete={handleDeleteSelected} isDeleteLoading={isDeleteLoading} />
+      {isLoading ? (
+        <div className="flex justify-center items-center">
+          <div className="w-16 h-16 border-4 border-blue-400 border-t-4 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      ) : (
       <table className="min-w-full mt-4 bg-white border-collapse">
         <thead>
           <tr className="bg-gray-100">
@@ -272,6 +288,7 @@ const Learner = () => {
           ))}
         </tbody>
       </table>
+      )}
       {isModalOpen && (
         <LearnerForm isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSave={handleSaveLead} />
       )}
