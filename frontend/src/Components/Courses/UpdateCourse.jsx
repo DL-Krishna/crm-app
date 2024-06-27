@@ -1,36 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { baseUrl } from '../../api/BaseUrl';
 
-const CreateCourse = ({ isOpen, onClose, onSave }) => {
-  const [formData, setFormData] = useState({
-    name: '',
-    fee: '',
-    description: ''
-  });
-
+// eslint-disable-next-line react/prop-types
+const UpdateCourse = ({ isOpen, onClose, course, onSave }) => {
+  const [formData, setFormData] = useState({ name: '', fee: '', description: '' });
   const [errors, setErrors] = useState({});
-  const [isLoading, setIsLoading] = useState(false); // State to track loading status
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (isOpen) {
-      // Reset the form data and errors when the form is opened
+    if (isOpen && course) {
       setFormData({
-        name: '',
-        fee: '',
-        description: ''
+        name: course.name,
+        fee: course.fee,
+        description: course.description || '',
       });
       setErrors({});
     }
-  }, [isOpen]);
+  }, [isOpen, course]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSave = async () => {
@@ -41,7 +33,6 @@ const CreateCourse = ({ isOpen, onClose, onSave }) => {
     if (!formData.fee) {
       newErrors.fee = "Course Fee is mandatory";
     }
-
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
@@ -52,24 +43,21 @@ const CreateCourse = ({ isOpen, onClose, onSave }) => {
       fee: formData.fee,
       description: formData.description,
     };
-
     setIsLoading(true);
 
     try {
-      const token = localStorage.getItem("token"); // Retrieve the token from local storage
-      const response = await axios.post(`${baseUrl}/courses`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const token = localStorage.getItem('token');
+      const userId = JSON.parse(localStorage.getItem('userInfo')).userId;
+      await axios.put(`${baseUrl}/courses/${course.id}`, { ...payload, userId }, {
+        headers: { Authorization: `Bearer ${token}` }
       });
-      toast.success("Course created successfully");
-      onSave(response.data.data); // Pass the newly created course data to the parent
-      onClose(); // Close the modal after saving
+      toast.success("Course updated successfully");
+      onSave({ ...course, ...payload });
+      onClose();
     } catch (error) {
-      console.error("Error saving course:", error);
-      toast.error("Failed to create course");
+      console.error('Error updating course:', error);
+      toast.error("Failed to update course");
     }
-
     setIsLoading(false);
   };
 
@@ -78,7 +66,7 @@ const CreateCourse = ({ isOpen, onClose, onSave }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-1/2">
-        <h2 className="text-xl mb-4">Create Course</h2>
+        <h2 className="text-xl mb-4">Update Course</h2>
         <div className="grid grid-cols-2 gap-4">
           <div className="flex flex-col">
             <input
@@ -113,14 +101,11 @@ const CreateCourse = ({ isOpen, onClose, onSave }) => {
         />
         <div className="flex justify-end mt-4 space-x-2">
           <button onClick={onClose} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
-          <button 
-            onClick={handleSave} 
-            className="bg-blue-500 text-white px-4 py-2 rounded flex items-center"
-          >
+          <button onClick={handleSave} className="bg-blue-500 text-white px-4 py-2 flex rounded">
             {isLoading && (
               <svg className="animate-spin h-5 w-5 mr-3 border-t-2 border-b-2 border-white rounded-full" viewBox="0 0 24 24"></svg>
             )}
-            Create
+            Update
           </button>
         </div>
       </div>
@@ -128,4 +113,4 @@ const CreateCourse = ({ isOpen, onClose, onSave }) => {
   );
 };
 
-export default CreateCourse;
+export default UpdateCourse;
