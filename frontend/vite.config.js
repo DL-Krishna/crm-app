@@ -8,9 +8,6 @@ export default defineConfig({
   build: {
     outDir: 'build',
   },
-  server: {
-    historyApiFallback: true,
-  },
   optimizeDeps: {
     include: [
       'react-router-dom', // Ensure react-router-dom is included in optimizeDeps
