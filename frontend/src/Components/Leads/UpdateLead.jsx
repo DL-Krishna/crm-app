@@ -10,6 +10,7 @@ const UpdateLead = ({ isOpen, onClose, lead, onSave }) => {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', courseName: '', description: '' });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false); // State to track loading status
+  const [courses, setCourses] = useState([]); // State to store courses data
 
   const navigate = useNavigate();  // Step 1: Create a navigate instance
 
@@ -22,7 +23,23 @@ const UpdateLead = ({ isOpen, onClose, lead, onSave }) => {
         courseName: lead.techStack,
         description: lead.description || ''
       });
-      setErrors({});
+      setErrors({});  
+       // Fetch courses data
+      const fetchCourses = async () => {
+       try {
+         const token = localStorage.getItem('token');
+         const response = await axios.get(`${baseUrl}/courses`, {
+           headers: { Authorization: `Bearer ${token}` }
+         });
+         setCourses(response.data.courses);
+       } catch (error) {
+         console.error('Error fetching courses:', error);
+         toast.error("Failed to fetch courses");
+       }
+     };
+
+     fetchCourses();
+
     }
   }, [isOpen, lead]);
 
@@ -136,14 +153,17 @@ const UpdateLead = ({ isOpen, onClose, lead, onSave }) => {
             />
           </div>
           <div className="flex flex-col">
-            <input
-              type="text"
+          <select
               name="courseName"
-              placeholder="Course Name"
               value={formData.courseName}
               onChange={handleChange}
               className="border p-2 rounded"
-            />
+            >
+              <option value="">Select Course</option>
+              {courses.map(course => (
+                <option key={course.id} value={course.name}>{course.name}</option>
+              ))}
+            </select>
           </div>
         </div>
         <textarea

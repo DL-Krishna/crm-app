@@ -14,6 +14,7 @@ const UpdateLead = ({ isOpen, onClose, lead, onSave }) => {
   });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false); // State to track loading status
+  const [courses, setCourses] = useState([]); // State to store courses data
 
   useEffect(() => {
     if (isOpen && lead) {
@@ -25,6 +26,21 @@ const UpdateLead = ({ isOpen, onClose, lead, onSave }) => {
         description: lead.description || "",
       });
       setErrors({});
+       // Fetch courses data
+       const fetchCourses = async () => {
+        try {
+          const token = localStorage.getItem('token');
+          const response = await axios.get(`${baseUrl}/courses`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setCourses(response.data.courses);
+        } catch (error) {
+          console.error('Error fetching courses:', error);
+          toast.error("Failed to fetch courses");
+        }
+      };
+
+      fetchCourses();
     }
   }, [isOpen, lead]);
 
@@ -117,14 +133,17 @@ const UpdateLead = ({ isOpen, onClose, lead, onSave }) => {
             />
           </div>
           <div className='flex flex-col'>
-            <input
-              type='text'
-              name='courseName'
-              placeholder='Course Name'
+          <select
+              name="courseName"
               value={formData.courseName}
               onChange={handleChange}
-              className='border p-2 rounded'
-            />
+              className="border p-2 rounded"
+            >
+              <option value="">Select Course</option>
+              {courses.map(course => (
+                <option key={course.id} value={course.name}>{course.name}</option>
+              ))}
+            </select>
           </div>
         </div>
         <textarea
