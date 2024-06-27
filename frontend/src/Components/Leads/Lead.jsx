@@ -26,8 +26,10 @@ const Lead = () => {
         const response = await axios.get(`${baseUrl}/leads`, {
           headers: { Authorization: `Bearer ${token}` }
         });
-        const Leads = response.data.leads.filter(lead => lead.leadStage === "lead");
-        setLeads(Leads);
+        const leads = response.data.leads
+          .filter(lead => lead.leadStage === "lead")
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // Sort by createdAt in descending order
+        setLeads(leads);
       } catch (error) {
         console.error('Error fetching leads:', error);
         toast.error("Failed to fetch leads");
@@ -35,7 +37,7 @@ const Lead = () => {
       setIsLoading(false); // End loading
     };
     fetchLeads();
-  }, []);
+  }, []);  
 
   const handleSelectAll = (event) => {
     if (event.target.checked) {
